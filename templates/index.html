@@ -17,18 +17,19 @@
         <div class="info-box">
             <h3>¿Qué es Musa?</h3>
             <hr class="separator">
-            <p>Descubre cómo nuestra innovadora solución, basada en inteligencia artificial y modelos de lenguaje de gran escala (LLM), puede transformar la publicidad de tu empresa.</p>
+            <p>Descubre cómo nuestra innovadora solución, basada en inteligencia artificial y modelos de lenguaje de
+                gran escala (LLM), puede transformar la publicidad de tu empresa.</p>
         </div>
         <div class="info-box">
             <h3>¿Cómo usarla?</h3>
             <hr class="separator">
-            <p>Completa los campos necesarios con información precisa: nombre de la empresa, segmento al cuál irá dirigido, emoción que se desea evocar,y descripción del producto, haz clic en “Generar”</p>
+            <p>Completa los campos necesarios con información precisa: nombre de la empresa, segmento al cuál irá
+                dirigido, emoción que se desea evocar,y descripción del producto, haz clic en “Generar”</p>
         </div>
         <div class="info-box">
             <h3>Autores</h3>
             <hr class="separator">
             <p>Ian Rodríguez Carrillo</p>
-            <!--<p>Juanita Sanabria Saenz</p>-->
         </div>
     </div>
     <hr class="separator">
@@ -58,35 +59,40 @@
             <button type="submit">¡Ver la magia!</button>
         </form>
     </div>
-
-    {% if prompt %}
-    <div class="prompt">
-        <h2>Prompt Entered</h2>
-        <pre>{{ prompt }}</pre>
-    </div>
-    {% endif %}
-
-    {% if results %}
-    <div class="results">
-        <h2>Results</h2>
-        {% for result in results %}
-        <div class="result">
-            <p><strong>Original Slogan:</strong> {{ result.original }}</p>
-            <p><strong>Improved Slogan Options:</strong></p>
-            <ul>
-                {% for option in result.improved %}
-                <li>{{ option }}</li>
+    <div class="outputs">
+        <div class="text-results">
+            {% if prompt %}
+            <div class="prompt">
+                <h2>Prompt ingresado</h2>
+                <pre>{{ prompt }}</pre>
+            </div>
+            {% endif %}
+            {% if results %}
+            <div class="results">
+                <h2>Resultados</h2>
+                {% for result in results %}
+                <div class="result">
+                    <p><strong>Eslogan Original:</strong> {{ result.original }}</p>
+                    <p><strong>Eslogan Mejorados:</strong></p>
+                    <ul>
+                        {% for option in result.improved %}
+                        <li>{{ option }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
                 {% endfor %}
-            </ul>
+            </div>
+            {% endif %}
         </div>
-        {% endfor %}
+        <div class="image-generation">
+            <h2>Imagen generada</h2>
+            <p>*La imagen puede contener inconsistencias*</p>
+        </div>
     </div>
-    {% endif %}
-        <div class="foot">
+    <div class="foot">
         <h5>Inteligencia Computacional</h5>
         <h6>UPTC</h6>
     </div>
 </div>
 </body>
 </html>
-

@@ -71,10 +71,10 @@ def generate():
     description = request.form['description']
 
     prompt = f"Company: {company_name} Segment: {segment} Emotion: {emotion} Description: {description}"
-    generated_texts = generate_text(prompt, model, tokenizer)
+    generated_texts = "xd"#generate_text(prompt, model, tokenizer)
 
     # API key and base URL for Deepinfra
-    api_key = "a"#2fJZxqtyEVZ3xhzwfmY1ZfDDS8zecGV1"
+    api_key = "2fJZxqtyEVZ3xhzwfmY1ZfDDS8zecGV1"
     base_url = "https://api.deepinfra.com/v1/openai"
 
     # Improved regular expression to capture variations of "Slogan"
@@ -84,16 +84,19 @@ def generate():
     for i, text in enumerate(generated_texts):
         match = re.search(eslogan_regex, text)
         if match:
-            eslogan = match.group(1).strip()
+
+            #eslogan = match.group(1).strip()
             #improved_eslogans = improve_eslogan(prompt,eslogan, api_key, base_url)
+            eslogan = "xd"
+            improved_eslogans = "xd"
             results.append({
                 'original': eslogan,
-                'improved': "xd"#improved_eslogans
+                'improved': improved_eslogans
             })
         else:
             results.append({
                 'original': None,
-                'improved': ["Generated text does not contain 'Slogan' in the expected format."]
+                'improved': ["El texto generado no contiene 'Eslogan' en la salida, revise la información ingresada."]
             })
 
     return render_template('index.html', results=results, prompt=prompt)
