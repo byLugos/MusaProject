@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Musa</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+<div class="container">
+    <div class="headMusa">
+        <img src="/static/LOGOTITULO.png" alt="Company Logo" class="logo">
+        <h1>Inspiración creativa a tu alcance.</h1>
+        <a href="https://github.com/byLugos/MusaProject" class="button">GitHub</a>
+    </div>
+    <div class="middleInfo">
+        <div class="info-box">
+            <h3>¿Qué es Musa?</h3>
+            <hr class="separator">
+            <p>Descubre cómo nuestra innovadora solución, basada en inteligencia artificial y modelos de lenguaje de gran escala (LLM), puede transformar la publicidad de tu empresa.</p>
+        </div>
+        <div class="info-box">
+            <h3>¿Cómo usarla?</h3>
+            <hr class="separator">
+            <p>Completa los campos necesarios con información precisa: nombre de la empresa, segmento al cuál irá dirigido, emoción que se desea evocar,y descripción del producto, haz clic en “Generar”</p>
+        </div>
+        <div class="info-box">
+            <h3>Autores</h3>
+            <hr class="separator">
+            <p>Ian Rodríguez Carrillo</p>
+            <!--<p>Juanita Sanabria Saenz</p>-->
+        </div>
+    </div>
+    <hr class="separator">
+    <hr class="separator">
+    <div class="form-container">
+        <form action="/generate" method="post">
+            <div class="form-group">
+                <label for="company_name">Nombre de la empresa:</label>
+                <input type="text" id="company_name" name="company_name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="segment">Segmento al que irá dirigido (max 2 palabras):</label>
+                <input type="text" id="segment" name="segment" pattern="\b\w+\b \b\w+\b|\b\w+\b" required>
+            </div>
+
+            <div class="form-group">
+                <label for="emotion">Emoción que desea evocar (max 2 palabras):</label>
+                <input type="text" id="emotion" name="emotion" pattern="\b\w+\b \b\w+\b|\b\w+\b" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Breve descripción (max 5 palabras):</label>
+                <input type="text" id="description" name="description" pattern="(\b\w+\b[\s]?){1,5}" required>
+            </div>
+
+            <button type="submit">¡Ver la magia!</button>
+        </form>
+    </div>
+
+    {% if prompt %}
+    <div class="prompt">
+        <h2>Prompt Entered</h2>
+        <pre>{{ prompt }}</pre>
+    </div>
+    {% endif %}
+
+    {% if results %}
+    <div class="results">
+        <h2>Results</h2>
+        {% for result in results %}
+        <div class="result">
+            <p><strong>Original Slogan:</strong> {{ result.original }}</p>
+            <p><strong>Improved Slogan Options:</strong></p>
+            <ul>
+                {% for option in result.improved %}
+                <li>{{ option }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+        <div class="foot">
+        <h5>Inteligencia Computacional</h5>
+        <h6>UPTC</h6>
+    </div>
+</div>
+</body>
+</html>
+

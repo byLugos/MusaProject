@@ -1,0 +1,9 @@
+# Exclusión de carpetas
+logs/
+pruebas/
+trained_model/
+
+# Exclusión de archivos
+cached_lm_GPT2Tokenizer_128_EntrenoNum4.txt
+EntrenoNum4.txt
+newDataV2.csv
