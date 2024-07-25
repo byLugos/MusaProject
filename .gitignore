@@ -22,6 +22,9 @@ logs/
 Pruebas/
 trained_model/
 results/
+cached_lm_GPT2Tokenizer_128_EntrenoNum4.txt
+EntrenoNum4.txt
+newDataV2.csv
 var/
 wheels/
 share/python-wheels/
