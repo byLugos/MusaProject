@@ -2,8 +2,53 @@ from flask import Flask, render_template, request
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 import re
 from openai import OpenAI
+import os
+from dotenv import load_dotenv
+import vertexai
+from vertexai.preview.vision_models import ImageGenerationModel
+import json
+import pybase64
+from google.oauth2 import service_account
 
+
+load_dotenv()
 app = Flask(__name__)
+
+service_account_json=pybase64.b64decode(os.getenv("IMAGEN"))
+service_account_info= json.loads(service_account_json)
+credentials=service_account.Credentials.from_service_account_info(service_account_info)
+
+PROJECT_ID = "sincere-amulet-430723-a9"
+vertexai.init(project=PROJECT_ID,credentials=credentials)
+
+model_image = ImageGenerationModel.from_pretrained("imagegeneration@006")
+
+def clear_directory(directory):
+    for filename in os.listdir(directory):
+        file_path = os.path.join(directory, filename)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+# Función para generar y guardar imágenes
+def generate_and_save_images(prompt, negative_prompt, guidance_scale, output_dir='static/images'):
+    clear_directory(output_dir)
+    response = model_image.generate_images(
+        prompt=prompt,
+        number_of_images=4,
+        negative_prompt=negative_prompt,
+        guidance_scale=guidance_scale
+    )
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    image_paths = []
+    for i, image in enumerate(response.images):
+        image_path = os.path.join(output_dir, f'image_{i}.png')
+        image._pil_image.save(image_path)
+        image_paths.append(image_path)
+
+    return image_paths
+
 
 # Load the trained GPT-2 model and tokenizer
 model_path = "./trained_model"
@@ -38,7 +83,6 @@ def generate_text(prompt, model, tokenizer, max_length=230, num_return_sequences
 
 
 # Define a function to use the Deepinfra API to improve the slogan
-# Define a function to use the Deepinfra API to improve the slogan
 def improve_eslogan(prompt, eslogan, api_key, base_url, num_options=4):
     openai = OpenAI(api_key=api_key, base_url=base_url)
     prompt = f"Con esta info: {prompt} y este eslogan: {eslogan} \nGenera {num_options} opciones para el eslogan."
@@ -71,7 +115,7 @@ def generate():
     description = request.form['description']
 
     prompt = f"Company: {company_name} Segment: {segment} Emotion: {emotion} Description: {description}"
-    generated_texts = "xd"#generate_text(prompt, model, tokenizer)
+    generated_texts = generate_text(prompt, model, tokenizer)
 
     # API key and base URL for Deepinfra
     api_key = "2fJZxqtyEVZ3xhzwfmY1ZfDDS8zecGV1"
@@ -79,16 +123,13 @@ def generate():
 
     # Improved regular expression to capture variations of "Slogan"
     eslogan_regex = r"Eslogan[:,| : ](.*)"
-
     results = []
+    eslogan=None
     for i, text in enumerate(generated_texts):
         match = re.search(eslogan_regex, text)
         if match:
-
-            #eslogan = match.group(1).strip()
-            #improved_eslogans = improve_eslogan(prompt,eslogan, api_key, base_url)
-            eslogan = "xd"
-            improved_eslogans = "xd"
+            eslogan = match.group(1).strip()
+            improved_eslogans = improve_eslogan(prompt,eslogan, api_key, base_url)
             results.append({
                 'original': eslogan,
                 'improved': improved_eslogans
@@ -98,8 +139,27 @@ def generate():
                 'original': None,
                 'improved': ["El texto generado no contiene 'Eslogan' en la salida, revise la información ingresada."]
             })
+    if eslogan:
+        prompt_text = f"""
+            Crea una imagen publicitaria con la siguiente información:
 
-    return render_template('index.html', results=results, prompt=prompt)
+            Nombre de la empresa: {company_name}
+            Público objetivo: {segment}
+            Sentimiento: {emotion}
+            Descripción: {description}
+            Eslogan: {eslogan}
+
+            Detalles adicionales:
+
+            La imagen debe mostrar de manera destacada el nombre de la empresa "{company_name}" y el eslogan "{eslogan}".
+            """
+
+        negative_prompt = request.form.get('negative_prompt', '')  # Este también puede estar en español
+        guidance_scale = int(request.form.get('guidance_scale', 10))
+        image_paths = generate_and_save_images(prompt_text, negative_prompt, guidance_scale)
+    else:
+        image_paths=[]
+    return render_template('index.html', results=5, prompt=prompt,images=image_paths)
 
 
 if __name__ == '__main__':

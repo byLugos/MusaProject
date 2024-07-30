@@ -4,6 +4,8 @@ from openai import OpenAI
 
 # Step 1: Load the trained model and tokenizer
 model_path = "./trained_model"
+api_key = "2fJZxqtyEVZ3xhzwfmY1ZfDDS8zecGV1"
+base_url = "https://api.deepinfra.com/v1/openai"
 tokenizer = GPT2Tokenizer.from_pretrained(model_path)
 
 # If the tokenizer does not have a padding token defined, set it
@@ -52,8 +54,7 @@ prompt = "Company: EcoClean Segment: Families Emotion: Elegance Description: Sup
 generated_texts = generate_text(prompt, model, tokenizer)
 
 # API key and base URL for Deepinfra
-api_key = "2fJZxqtyEVZ3xhzwfmY1ZfDDS8zecGV1"
-base_url = "https://api.deepinfra.com/v1/openai"
+
 
 # Improved regular expression to capture variations of "Slogan"
 eslogan_regex = r"Eslogan[:,| : ](.*)"

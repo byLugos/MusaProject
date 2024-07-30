@@ -5,7 +5,6 @@
     <title>Musa</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
-
 <body>
 <div class="container">
     <div class="headMusa">
@@ -30,6 +29,7 @@
             <h3>Autores</h3>
             <hr class="separator">
             <p>Ian Rodríguez Carrillo</p>
+            <p>Juanita Sanabria Sáenz</p>
         </div>
     </div>
     <hr class="separator">
@@ -85,8 +85,16 @@
             {% endif %}
         </div>
         <div class="image-generation">
-            <h2>Imagen generada</h2>
-            <p>*La imagen puede contener inconsistencias*</p>
+            {% if images %}
+            <h2>Imágenes Generadas</h2>
+            <div class="image-grid">
+                {% for image in images %}
+                <div class="image-item">
+                    <img src="{{ image }}" alt="Generated Image">
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
     </div>
     <div class="foot">

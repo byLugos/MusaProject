@@ -173,6 +173,26 @@ button:hover {
     border: 0.5px solid #1C2C3B;
     width: 50px;
 }
+.image-generation {
+    grid-column: 2;
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 13px;
+    width: 92%;
+}
+
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px; /* Espacio entre las imágenes */
+}
+
+.image-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px; /* Opcional: para bordes redondeados */
+}
 
 .foot {
     margin-top: 50px;
